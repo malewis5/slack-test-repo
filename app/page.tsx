@@ -12,6 +12,12 @@ export default function Home() {
           height={38}
           priority
         />
+        <div className="max-w-xl text-center sm:text-left text-base text-zinc-700 dark:text-zinc-200 mb-4">
+          <h2 className="text-xl font-semibold mb-2">About Vercel</h2>
+          <p>
+            Vercel is a cloud platform for static sites and serverless functions that enables developers to host websites and web applications with ease. It is the creator of Next.js and provides seamless integration for deploying Next.js apps, offering features like automatic scaling, global CDN, instant rollbacks, and a simple developer experience. Vercel is trusted by teams of all sizes to deliver fast, reliable, and secure web experiences.
+          </p>
+        </div>
         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
           <li className="mb-2 tracking-[-.01em]">
             Get started by editing{" "}
