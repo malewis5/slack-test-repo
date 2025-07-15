@@ -2,19 +2,52 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
+interface Todo {
+  id: number;
+  text: string;
+  editing: boolean;
+}
+
 export default function Home() {
-  const [todos, setTodos] = useState<string[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [input, setInput] = useState("");
+  const [editInput, setEditInput] = useState("");
+  const [editId, setEditId] = useState<number | null>(null);
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
-    setTodos([input.trim(), ...todos]);
+    setTodos([
+      { id: Date.now(), text: input.trim(), editing: false },
+      ...todos,
+    ]);
     setInput("");
   };
 
-  const removeTodo = (idx: number) => {
-    setTodos(todos.filter((_, i) => i !== idx));
+  const removeTodo = (id: number) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  const startEdit = (id: number, text: string) => {
+    setEditId(id);
+    setEditInput(text);
+    setTodos(todos.map(todo => todo.id === id ? { ...todo, editing: true } : { ...todo, editing: false }));
+  };
+
+  const cancelEdit = () => {
+    setEditId(null);
+    setEditInput("");
+    setTodos(todos.map(todo => ({ ...todo, editing: false })));
+  };
+
+  const saveEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editId === null || !editInput.trim()) return;
+    setTodos(todos.map(todo =>
+      todo.id === editId ? { ...todo, text: editInput.trim(), editing: false } : todo
+    ));
+    setEditId(null);
+    setEditInput("");
   };
 
   return (
@@ -41,9 +74,9 @@ export default function Home() {
             <li className="text-gray-400 text-center">No todos yet.</li>
           )}
           <AnimatePresence initial={false}>
-            {todos.map((todo, idx) => (
+            {todos.map((todo) => (
               <motion.li
-                key={todo + idx}
+                key={todo.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: 40 }}
@@ -51,14 +84,50 @@ export default function Home() {
                 layout
                 className="flex items-center justify-between bg-gray-100 dark:bg-neutral-800 rounded px-3 py-2"
               >
-                <span className="truncate">{todo}</span>
-                <button
-                  onClick={() => removeTodo(idx)}
-                  className="ml-2 text-xs text-gray-400 hover:text-red-500 transition"
-                  aria-label="Remove todo"
-                >
-                  Remove
-                </button>
+                {todo.editing ? (
+                  <form onSubmit={saveEdit} className="flex-1 flex gap-2 items-center">
+                    <input
+                      className="flex-1 px-2 py-1 rounded border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
+                      type="text"
+                      value={editInput}
+                      onChange={e => setEditInput(e.target.value)}
+                      autoFocus
+                    />
+                    <button
+                      type="submit"
+                      className="text-xs px-2 py-1 rounded bg-black text-white dark:bg-white dark:text-black font-medium hover:bg-gray-800 dark:hover:bg-neutral-200 transition"
+                    >
+                      Save
+                    </button>
+                    <button
+                      type="button"
+                      onClick={cancelEdit}
+                      className="text-xs px-2 py-1 rounded bg-gray-200 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-neutral-600 transition"
+                    >
+                      Cancel
+                    </button>
+                  </form>
+                ) : (
+                  <>
+                    <span className="truncate flex-1">{todo.text}</span>
+                    <div className="flex gap-1 ml-2">
+                      <button
+                        onClick={() => startEdit(todo.id, todo.text)}
+                        className="text-xs text-gray-400 hover:text-blue-500 transition"
+                        aria-label="Edit todo"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => removeTodo(todo.id)}
+                        className="text-xs text-gray-400 hover:text-red-500 transition"
+                        aria-label="Remove todo"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </>
+                )}
               </motion.li>
             ))}
           </AnimatePresence>
