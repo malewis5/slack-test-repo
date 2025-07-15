@@ -62,12 +62,14 @@ export default function Home() {
             value={input}
             onChange={e => setInput(e.target.value)}
           />
-          <button
+          <motion.button
             type="submit"
             className="px-4 py-2 rounded bg-black text-white dark:bg-white dark:text-black font-medium hover:bg-gray-800 dark:hover:bg-neutral-200 transition"
+            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.05 }}
           >
             Add
-          </button>
+          </motion.button>
         </form>
         <ul className="space-y-2">
           {todos.length === 0 && (
@@ -79,52 +81,78 @@ export default function Home() {
                 key={todo.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, x: 40 }}
+                exit={{ opacity: 0, x: 40, height: 0, marginTop: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0 }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 layout
-                className="flex items-center justify-between bg-gray-100 dark:bg-neutral-800 rounded px-3 py-2"
+                className="flex items-center justify-between bg-gray-100 dark:bg-neutral-800 rounded px-3 py-2 overflow-hidden"
               >
                 {todo.editing ? (
-                  <form onSubmit={saveEdit} className="flex-1 flex gap-2 items-center">
-                    <input
+                  <motion.form
+                    onSubmit={saveEdit}
+                    className="flex-1 flex gap-2 items-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <motion.input
                       className="flex-1 px-2 py-1 rounded border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20"
                       type="text"
                       value={editInput}
                       onChange={e => setEditInput(e.target.value)}
                       autoFocus
+                      initial={{ scale: 0.95 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 300 }}
                     />
-                    <button
+                    <motion.button
                       type="submit"
                       className="text-xs px-2 py-1 rounded bg-black text-white dark:bg-white dark:text-black font-medium hover:bg-gray-800 dark:hover:bg-neutral-200 transition"
+                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.05 }}
                     >
                       Save
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
                       type="button"
                       onClick={cancelEdit}
                       className="text-xs px-2 py-1 rounded bg-gray-200 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-neutral-600 transition"
+                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.05 }}
                     >
                       Cancel
-                    </button>
-                  </form>
+                    </motion.button>
+                  </motion.form>
                 ) : (
                   <>
-                    <span className="truncate flex-1">{todo.text}</span>
+                    <motion.span
+                      className="truncate flex-1"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {todo.text}
+                    </motion.span>
                     <div className="flex gap-1 ml-2">
-                      <button
+                      <motion.button
                         onClick={() => startEdit(todo.id, todo.text)}
                         className="text-xs text-gray-400 hover:text-blue-500 transition"
                         aria-label="Edit todo"
+                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.1 }}
                       >
                         Edit
-                      </button>
-                      <button
+                      </motion.button>
+                      <motion.button
                         onClick={() => removeTodo(todo.id)}
                         className="text-xs text-gray-400 hover:text-red-500 transition"
                         aria-label="Remove todo"
+                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.1 }}
                       >
                         Remove
-                      </button>
+                      </motion.button>
                     </div>
                   </>
                 )}
