@@ -3,7 +3,18 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full max-w-xl">
+        {/* Welcoming Headline */}
+        <h1 className="text-3xl sm:text-4xl font-bold text-center sm:text-left mb-2">Welcome to Our Next.js App!</h1>
+        {/* Brief Description */}
+        <p className="text-lg text-gray-600 dark:text-gray-300 text-center sm:text-left mb-6">Experience the power of modern web development with Next.js and TailwindCSS. Build fast, scalable, and beautiful web applications effortlessly.</p>
+        {/* Call-to-Action Button */}
+        <a
+          href="#get-started"
+          className="inline-block rounded-full bg-black text-white dark:bg-white dark:text-black px-6 py-3 font-semibold text-base shadow hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors mb-8"
+        >
+          Get Started
+        </a>
         <Image
           className="dark:invert"
           src="/next.svg"
