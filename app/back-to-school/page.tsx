@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function BackToSchoolPage() {
   return (
@@ -52,6 +53,9 @@ export default function BackToSchoolPage() {
           >
             Read our docs
           </a>
+        </div>
+        <div className="mt-8">
+          <Link href="/" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">← Back to Home</Link>
         </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
